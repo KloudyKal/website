@@ -93,6 +93,7 @@ head('Our Team', true);
                                             <h5> yo yo yo</h5>
                                             <h6 class="h6-with-small"><a href="#"> Cody Walls</a><span class="small text-silver-chalice">Team Member</span></h6>
                                             <p> cody is a cs major just trying to do his thang</p>
+                                            <p> again testing </p>
                                             <p> just trying to get this to work:)</p>
 
 
