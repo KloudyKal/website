@@ -23,16 +23,16 @@ $userinfo = array(); // this will be populated later, we are effectively making 
 $session = array();
 
 class mmysqli extends mysqli {
-    public function __construct($host, $user, $pass, $db) {
+    public function __construct($host, $user, $pass, $db, $port = 3306, $socket = null) {
         parent::init();
 
-        if (!parent::real_connect($host, $user, $pass, $db, 3306, null, MYSQLI_CLIENT_FOUND_ROWS)) {
+        if (!parent::real_connect($host, $user, $pass, $db, $port, $socket, MYSQLI_CLIENT_FOUND_ROWS)) {
             die('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
         }
     }
 }
 
-$db = new mmysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME);
+$db = new mmysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME, DATABASE_PORT, DATABASE_SOCKET);
 $db->set_charset(DATABASE_CHARSET);
 
 date_default_timezone_set(TIMEZONE);
@@ -59,7 +59,7 @@ function head($title, $heading, $auth = false, $return = false) {
 		date_default_timezone_set($userinfo['timezone']);
 		
 		//extras
-		if ($userinfo['sandbox']) {
+		if ($userinfo['sandbox'] || ENVIRONMENT == Environment::DEVELOPMENT) {
 			$untrobotics->set_sandbox(true);
 		}
 	}
@@ -89,8 +89,7 @@ function head($title, $heading, $auth = false, $return = false) {
 }
 
 function footer($die = true) {
-	global $base;
-	require("$base/template/footer.php");
+	require(BASE . "/template/footer.php");
 	if ($die == true) {
 		die();
 	}
@@ -100,7 +99,7 @@ function email($to, $subject, $message, $replyto = false, $headers = NULL, $atta
 	global $db;
 	require_once(BASE . "/api/sendgrid/sendgrid-php.php");
 	
-	$email = new \SendGrid\Mail\Mail();
+	$email = new \SendGrid\Mail\Mail(); 
 	$email->setFrom("no-reply@untrobotics.com", "UNT Robotics");
 	$email->setSubject($subject);
 	
