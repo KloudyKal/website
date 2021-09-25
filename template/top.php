@@ -59,10 +59,14 @@ function head($title, $heading, $auth = false, $return = false) {
 		date_default_timezone_set($userinfo['timezone']);
 		
 		//extras
-		if ($userinfo['sandbox'] || ENVIRONMENT == Environment::DEVELOPMENT) {
+		if ($userinfo['sandbox']) {
 			$untrobotics->set_sandbox(true);
 		}
 	}
+
+	if (ENVIRONMENT == Environment::DEVELOPMENT) {
+        $untrobotics->set_sandbox(true);
+    }
 	
 	if ($auth == true) {
 		if (!is_array($auth_result)) {
