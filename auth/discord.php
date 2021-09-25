@@ -31,6 +31,7 @@ function get_discord_access_token($code, $scope) {
 	$data = json_decode($result);
 
 	$access_token = $data->access_token;
+
 	//var_dump($data);
 	return $access_token;
 }
@@ -118,7 +119,61 @@ function assign_user_good_standing($user_discord_id) {
 	return AdminBot::add_user_role($user_discord_id);
 }
 
-head('Joined Discord', true, true);
+$head = head('Joined Discord', true, true, true);
+
+$error = null;
+
+do {
+
+    $code = null;
+    if (isset($_GET['code'])) {
+        $code = $_GET['code'];
+    } else {
+        // Alert!
+        $error = "No authorization code provided.";
+    }
+
+    $discord_access_token = get_discord_access_token($code, "identify guilds.join");
+    $user = get_user_information($discord_access_token);
+
+    $q = $db->query('UPDATE users SET discord_id = "' . $db->real_escape_string($user->id) . '" WHERE id = "' . $db->real_escape_string($userinfo['id']) . '"');
+    if (!$q || $db->affected_rows !== 1) {
+        // Alert!
+        $error = "Unable to set the user's Discord ID: " . $db->affected_rows;
+    }
+
+    $added_to_server = add_user_to_server($user, $discord_access_token, $userinfo['name']);
+
+    if (!$added_to_server) {
+        // Alert!
+        $error = "Failed to add user to server.";
+    }
+
+    $is_user_in_good_standing = $untrobotics->is_user_in_good_standing($userinfo);
+    if ($is_user_in_good_standing) {
+        $assigned = assign_user_good_standing($user->id);
+        if ($assigned->status_code != 204) {
+            $error = "Failed to give user the correct role";
+        }
+    } else {
+        // Alert!
+        $error = "Current user is not in good standing.";
+    }
+
+} while (false);
+
+if ($error == null) {
+    // check for redirect cookie
+    $returnto = $_COOKIE['DISCORD_AUTH_SECONDARY_REDIRECT'];
+
+    if (isset($returnto)) {
+        setcookie('DISCORD_AUTH_SECONDARY_REDIRECT', '');
+        header("Location: //{$_SERVER['SERVER_NAME']}/".preg_replace("@^/@i", "", $returnto));
+        die();
+    }
+}
+
+echo $head;
 
 // user must be authenticated to reach this point
 
@@ -133,7 +188,7 @@ strong.no-wrap {
 }
 .scheme-buttons a img {
 	width: 190px;
-	background-color: white;
+	background-color: black;
 	border-radius: 8px;
 	border: 3px solid black;
 }
@@ -142,7 +197,7 @@ strong.no-wrap {
 	margin: 0 !important;
 }
 .scheme-buttons a:hover img {
-	background-color: black;
+	background-color: white;
 }
 .scheme-buttons a:hover img.black {
 	display: none;
@@ -157,78 +212,29 @@ strong.no-wrap {
                 <div class="shell text-sm-left">
                         <div class="range text-center">
                                 <div class="col-lg-6 col-lg-offset-3">
-									<?php
-									try {
-										$code = null;
-										if (isset($_GET['code'])) {
-											$code = $_GET['code'];
-										} else {
-											// Alert!
-											throw new Exception("No authorization code provided.");
-										}
-
-										$discord_access_token = get_discord_access_token($code, "identify guilds.join");
-										$user = get_user_information($discord_access_token);
-
-
-										$q = $db->query('UPDATE users SET discord_id = "' . $db->real_escape_string($user->id) . '" WHERE id = "' . $db->real_escape_string($userinfo['id']) . '"');
-										if (!$q || $db->affected_rows !== 1) {
-											// Alert!
-											throw new Exception("Unable to set the user's Discord ID: " . $db->affected_rows);
-										}
-
-										$added_to_server = add_user_to_server($user, $discord_access_token, $userinfo['name']);
-
-										if (!$added_to_server) {
-											// Alert!
-											throw new Exception("Failed to add user to server.");
-										}
-
-										$is_user_in_good_standing = $untrobotics->is_user_in_good_standing($userinfo);
-										if ($is_user_in_good_standing) {
-											$assigned = assign_user_good_standing($user->id);
-											if ($assigned->status_code != 204) {
-											    error_log("AUTHDIS", var_export($assigned, true));
-												throw new Exception("Failed to give user the correct role: " . $assigned->status_code . " ($code)");
-											}
-										} else {
-											// Alert!
-											throw new Exception("Current user is not in good standing.");
-										}
-										?>
+                                    <?php
+                                    if ($error == null) {
+                                    ?>
 										<h1>You're good to go</h1>
 										<h5 class="offset-top-50"><strong><?php echo $user->username; ?>#<?php echo $user->discriminator; ?></strong> has been given the <em>Good Standing</em> role.</h5>
 
 										<div class="scheme-buttons offset-top-50">
 											<a href="market://details?id=com.discord">
-												<img class="black" src="/images/buttons/discord-forward-android-white.png"/>
-												<img class="white" src="/images/buttons/discord-forward-android.png"/>
+												<img class="black" src="/images/buttons/discord-forward-android.png"/>
+												<img  class="white" src="/images/buttons/discord-forward-android-white.png"/>
 											</a>
 											<a href="https://discordapp.com/channels/<?php echo DISCORD_GUILD_ID; ?>/<?php echo DISCORD_GENERAL_CHANNEL_ID; ?>">
-												<img class="black"  src="/images/buttons/discord-forward-browser-white.png"/>
-												<img class="white" src="/images/buttons/discord-forward-browser.png"/>
+												<img class="black"  src="/images/buttons/discord-forward-browser.png"/>
+												<img class="white" src="/images/buttons/discord-forward-browser-white.png"/>
 											</a>
 											<a href="com.hammerandchisel.discord://">
-												<img class="black"  src="/images/buttons/discord-forward-apple-white.png"/>
-												<img class="white" src="/images/buttons/discord-forward-apple.png"/>
+												<img class="black"  src="/images/buttons/discord-forward-apple.png"/>
+												<img  class="white" src="/images/buttons/discord-forward-apple-white.png"/>
 											</a>
 										</div>
 										<?php
-									} catch (Exception $ex) {
-
-									    $username = "N/A";
-                                        $discriminator = "N/A";
-
-									    if (@isset($user)) {
-									        if (property_exists($user, "username")) {
-									            $username = $user->username;
-                                            }
-                                            if (property_exists($user, "discriminator")) {
-                                                $discriminator = $user->discriminator;
-                                            }
-                                        }
-
-										AdminBot::send_message("[AUTHDIS] Failed to assign '{$userinfo['name']}' [{$username}#{$discriminator}] (http://untro.bo/admin/check-good-standing?u={$userinfo['id']}) to the Good Standing role.\n{$ex}");
+                                    } else {
+										AdminBot::send_message("[AUTHDIS] Failed to assign user ({$userinfo['id']}) to the Good Standing role.\n{$error}");
 										?>
 										<div class="alert alert-danger">
 											<h2 style="color: inherit;">Error!</h2>
