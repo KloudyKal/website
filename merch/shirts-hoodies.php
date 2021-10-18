@@ -250,8 +250,26 @@ head('Order Shirts & Hoodies', true);
 					?>
 				</div>
 			  </div>
-				
-				<div class="cell-lg-3 product-listing shirt-hoodie">
+
+                <div class="cell-lg-3 product-listing shirt-hoodie">
+                    <div class="product-container-pad">
+                        <h4>Aerospace Tank <span>$25.00</span></h4>
+                        <div class="front-back-info">
+							<span>
+								<span>Front</span><span>Green Engineering Eagle Logo</span>
+							</span>
+                            <span>
+								<span>Back</span><span>Rocketbird Logo</span>
+							</span>
+                        </div>
+                        <div class="product-images">
+                            <img src="https://m.media-amazon.com/images/I/A1Ig7DnP6sL._CLa%7C2140%2C2000%7C511gM7LhlOL.png%7C0%2C0%2C2140%2C2000%2B0.0%2C0.0%2C2140.0%2C2000.0_AC_UX679_.png" />
+                            <img src="https://m.media-amazon.com/images/I/A1s6NUlBgjL._CLa%7C2140%2C2000%7C71nf9R3ZifL.png%7C0%2C0%2C2140%2C2000%2B0.0%2C0.0%2C2140.0%2C2000.0_AC_UX569_.png" />
+                        </div>
+                        <a class="btn btn-primary buy-product" href="https://www.amazon.com/dp/B09F8W5B9X" />Buy Now</a>
+                    </div>
+                </div>
+                <div class="cell-lg-3 product-listing shirt-hoodie">
 					<div class="product-container-pad">
 					  <h4>Premium T-shirt <span>$21.00</span></h4>
 						<div class="front-back-info">
@@ -305,6 +323,42 @@ head('Order Shirts & Hoodies', true);
 						<a class="btn btn-primary buy-product" href="https://www.amazon.com/dp/B08J5KWRRP" />Buy Now</a>
 					</div>
 				</div>
+                <div class="cell-lg-3 product-listing shirt-hoodie">
+                    <div class="product-container-pad">
+                        <h4>Aerospace Hoodie <span>$40.00</span></h4>
+                        <div class="front-back-info">
+							<span>
+								<span>Front</span><span>Green Engineering Eagle Logo</span>
+							</span>
+                            <span>
+								<span>Back</span><span><em>Rocketbird Logo</em></span>
+							</span>
+                        </div>
+                        <div class="product-images">
+                            <img src="https://m.media-amazon.com/images/I/B1i3u9-Q-KS._CLa%7C2140%2C2000%7CB1YiDxp%2BNcS.png%7C0%2C0%2C2140%2C2000%2B0.0%2C0.0%2C2140.0%2C2000.0_AC_UX569_.png" />
+                            <img src="https://m.media-amazon.com/images/I/A1y6JwyATPL._CLa%7C2140%2C2000%7CB16TTdUGqlS.png%7C0%2C0%2C2140%2C2000%2B0.0%2C0.0%2C2140.0%2C2000.0_AC_UX522_.png" />
+                        </div>
+                        <a class="btn btn-primary buy-product" href="https://www.amazon.com/dp/B095BW17BT" />Buy Now</a>
+                    </div>
+                </div>
+                <div class="cell-lg-3 product-listing shirt-hoodie">
+                    <div class="product-container-pad">
+                        <h4>Aerospace Zip Up <span>$40.00</span></h4>
+                        <div class="front-back-info">
+							<span>
+								<span>Front</span><span>Green Engineering Eagle Logo</span>
+							</span>
+                            <span>
+								<span>Back</span><span><em>Rocketbird Logo</em></span>
+							</span>
+                        </div>
+                        <div class="product-images">
+                            <img src="https://m.media-amazon.com/images/I/B1FGy+bPeZS._CLa%7C2140%2C2000%7C51CvaDrcIsL.png%7C0%2C0%2C2140%2C2000%2B0.0%2C0.0%2C2140.0%2C2000.0_AC_UX679_.png" />
+                            <img src="https://m.media-amazon.com/images/I/B14zf5cQ1wS._CLa%7C2140%2C2000%7C81VWLHBvNcL.png%7C0%2C0%2C2140%2C2000%2B0.0%2C0.0%2C2140.0%2C2000.0_AC_UX522_.png" />
+                        </div>
+                        <a class="btn btn-primary buy-product" href="https://www.amazon.com/dp/B095BVTNBJ" />Buy Now</a>
+                    </div>
+                </div>
 				<div class="cell-lg-3 product-listing shirt-hoodie">
 					<div class="product-container-pad">
 					  <h4>Pullover Hoodie <span>$35.00</span></h4>
