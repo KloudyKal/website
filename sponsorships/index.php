@@ -10,6 +10,21 @@ $payment_button = new PaymentButton(
 );
 $payment_button->set_complete_return_uri('/sponsorships/donate/thank-you');
 ?>
+
+<section class="breadcrumb-classic">
+    <div class="rd-parallax">
+        <div data-speed="0.25" data-type="media" data-url="/images/headers/activities.jpg" class="rd-parallax-layer"></div>
+        <div data-speed="0" data-type="html" class="rd-parallax-layer section-top-75 section-md-top-150 section-lg-top-260">
+            <div class="shell">
+                <ul class="list-breadcrumb">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/sponsorships">Sponsor Us</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
 <section class="section-50 section-md-75 section-lg-100">
     <div class="shell range-offset-1">
         <div class="range">
